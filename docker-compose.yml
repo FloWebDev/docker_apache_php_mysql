@@ -6,13 +6,14 @@ services:
       context: ./conf
       dockerfile: Dockerfile
     ports:
-        - "8181:80"
+        - "7979:80"
+        - "8181:81"
         - "8282:82"
-        - "8383:83"
     volumes:
         - ./src:/var/www/html
         - ./log/apache2:/var/log/apache2
         - ./log/php:/var/log/php
+        - ./log/cron:/var/log/cron
     restart: always
     extra_hosts:
       - host.docker.internal:host-gateway

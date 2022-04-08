@@ -3,6 +3,7 @@ FROM php:8.1-apache
 ARG UID
 ARG GID
 
+# Install packages
 RUN apt-get update
 RUN apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certificates gnupg2 msmtp perl procps \
         libfreetype6-dev \
@@ -13,30 +14,19 @@ RUN apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certi
         && docker-php-ext-configure gd --with-freetype --with-jpeg \
         && docker-php-ext-install -j$(nproc) gd
 
+# timezone Apache server
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # PHP Configuration
-RUN docker-php-ext-install bcmath
-RUN docker-php-ext-install bz2
-RUN docker-php-ext-install calendar
-RUN docker-php-ext-install dba
-RUN docker-php-ext-install exif
-RUN docker-php-ext-install fileinfo
-RUN docker-php-ext-install gettext
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-install imap
-RUN docker-php-ext-install intl
-RUN docker-php-ext-install pdo pdo_mysql
-RUN docker-php-ext-install soap
-RUN docker-php-ext-install tidy
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install xsl
-RUN docker-php-ext-install zip
-RUN docker-php-ext-configure hash --with-mhash
+RUN docker-php-ext-install bcmath bz2 calendar dba exif fileinfo gettext intl pdo pdo_mysql soap tidy mbstring xsl zip \
+        && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+        && docker-php-ext-install imap
 
+# php-ssh2
 RUN pecl install ssh2-1.3.1 && docker-php-ext-enable ssh2
 
+# xdebug
 RUN pecl install xdebug-3.1.3 \
     && docker-php-ext-enable xdebug \
     && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
@@ -44,17 +34,30 @@ RUN pecl install xdebug-3.1.3 \
 
 RUN wget https://getcomposer.org/composer-stable.phar -O /usr/local/bin/composer && chmod +x /usr/local/bin/composer
 
-# Enable apache modules
+# Configuration php.ini
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
+    && echo "display_errors = On" >> "$PHP_INI_DIR/php.ini" \
+    && echo "error_reporting = E_ALL" >> "$PHP_INI_DIR/php.ini" \
+    && echo "date.timezone = Europe/Paris" >> "$PHP_INI_DIR/php.ini" \
+    && echo "error_log = /var/log/php/php_errors.log" >> "$PHP_INI_DIR/php.ini"
+
+# VHOST
+COPY ./default.conf /etc/apache2/sites-available/default.conf
+COPY ./web.conf /etc/apache2/sites-available/web.conf
+
+# Enable apache modules and sites
 RUN a2enmod rewrite headers ssl
+RUN a2ensite default.conf web.conf
 
-COPY ./php.ini /usr/local/etc/php/php.ini
-COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
-
+# Cron
 COPY ./cron /etc/cron.d/crontab
 RUN crontab /etc/cron.d/crontab
 
+# Create folders
 RUN mkdir -p /var/log/cron && mkdir -p /var/log/php
 
+# UID & GID
 RUN usermod -u $UID www-data && groupmod -g $GID www-data
 
+# Run Cron & Apache
 RUN sed -i 's/^exec /service cron start\n\nexec /' /usr/local/bin/apache2-foreground
