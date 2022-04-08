@@ -1,0 +1,39 @@
+version: "3"
+services:
+
+  web:
+    build:
+      context: ./conf
+      dockerfile: Dockerfile
+    ports:
+        - "8181:80"
+        - "8282:82"
+        - "8383:83"
+    volumes:
+        - ./src:/var/www/html
+        - ./log/apache2:/var/log/apache2
+        - ./log/php:/var/log/php
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  mysql:
+    image: mysql:8.0.26
+    ports:
+      - "3306:3306"
+    environment: 
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    restart: always
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=${PMA_USER}
+      - PMA_PASSWORD=${PMA_PASSWORD}
+      - UPLOAD_LIMIT=${UPLOAD_LIMIT}
+    restart: always

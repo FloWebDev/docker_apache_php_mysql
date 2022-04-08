@@ -1,0 +1,17 @@
+.env
+
+mysql_data/*
+!mysql_data/.gitkeep
+
+log/apache2/*
+!log/apache2/.gitkeep
+log/php/*
+!log/php/.gitkeep
+
+src/*
+!src/info.php
+!src/web/
+
+!src/cron/
+src/cron/*
+!src/cron/script.php
