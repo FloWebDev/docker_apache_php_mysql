@@ -10,4 +10,4 @@ Renommer le fichier **.env.simple** en **.env** et fournir une valeur pour chaqu
 
 ## Utilier le Makefile
 
-Utiliser la commande `make build-up` pour lancer le projet.
+Utiliser la commande `make build-up` pour lancer le projet et consulter les autres commandes disponibles avec `make help`.
