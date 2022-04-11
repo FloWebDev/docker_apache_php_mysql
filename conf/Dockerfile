@@ -19,7 +19,7 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # PHP Configuration
-RUN docker-php-ext-install bcmath bz2 calendar dba exif fileinfo gettext intl pdo pdo_mysql soap tidy mbstring xsl zip \
+RUN docker-php-ext-install bcmath bz2 calendar dba exif fileinfo gettext intl pdo pdo_mysql mysqli soap tidy mbstring xsl zip \
         && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
         && docker-php-ext-install imap
 
