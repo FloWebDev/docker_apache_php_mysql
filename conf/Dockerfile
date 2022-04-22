@@ -10,8 +10,8 @@ RUN apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certi
         libjpeg62-turbo-dev \
         libpng-dev \
         libssh2-1-dev libssh2-1 \
-        g++ gettext libicu-dev openssl libc-client-dev libkrb5-dev libxml2-dev libfreetype6-dev libgd-dev libmcrypt-dev bzip2 libbz2-dev libtidy-dev libcurl4-openssl-dev libz-dev libmemcached-dev libxslt-dev net-tools libonig-dev libzip-dev zip \
-        && docker-php-ext-configure gd --with-freetype --with-jpeg \
+        g++ gettext libicu-dev openssl libc-client-dev libkrb5-dev libxml2-dev libfreetype6-dev libgd-dev libmcrypt-dev bzip2 libbz2-dev libtidy-dev libcurl4-openssl-dev libz-dev libmemcached-dev libxslt-dev net-tools libonig-dev libzip-dev zip libwebp-dev \
+        && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
         && docker-php-ext-install -j$(nproc) gd
 
 # timezone Apache server
