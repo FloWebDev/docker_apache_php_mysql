@@ -47,7 +47,7 @@ COPY ./default.conf /etc/apache2/sites-available/default.conf
 COPY ./web.conf /etc/apache2/sites-available/web.conf
 
 # Enable apache modules and sites
-RUN a2enmod rewrite headers ssl
+RUN a2enmod rewrite actions headers ssl
 RUN a2ensite default.conf web.conf
 
 # Cron
