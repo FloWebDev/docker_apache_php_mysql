@@ -4,8 +4,7 @@ ARG UID
 ARG GID
 
 # Install packages
-RUN apt-get update
-RUN apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certificates gnupg2 msmtp perl procps \
+RUN apt-get update && apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certificates gnupg2 msmtp perl procps \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
