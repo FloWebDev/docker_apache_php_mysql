@@ -11,3 +11,14 @@ Renommer le fichier **.env.simple** en **.env** et fournir une valeur pour chaqu
 ## Utilier le Makefile
 
 Utiliser la commande `make build-up` pour lancer le projet et consulter les autres commandes disponibles avec `make help`.
+
+## Bug : Temporary failure resolving 'deb.debian.org'
+
+Si un bug *Temporary failure resolving 'deb.debian.org'* apparait lors du build de l'image, spécifier les DNS pour les containers Docker dans un fichier `/etc/docker/daemon.json` (sur la machine host)
+peut permettre de solutionner ce problème (source : https://stackoverflow.com/questions/61567404/docker-temporary-failure-resolving-deb-debian-org#68199803) :
+
+```
+{
+  "dns": ["8.8.8.8", "8.8.4.4"]
+}
+```
