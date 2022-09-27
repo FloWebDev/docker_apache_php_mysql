@@ -5,7 +5,7 @@ IDU := $(shell id -u)
 IDG := $(shell id -g)
 CONTAINERS := $(shell docker ps -a -q)
 
-.PHONY: help build-up down web-sh mysql-sh remove-containers remove-images
+.PHONY: help build-up down web-sh mysql-sh remove-containers remove-images docker-purge
 
 #
 ### General
@@ -36,6 +36,10 @@ remove-containers:
 ## remove all Docker images
 remove-images:
 	docker image prune -a
+
+## remove all stopped containers, networks, images (at least one container associated to them) and build cache
+remove-purge:
+	docker system prune -a
 
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)

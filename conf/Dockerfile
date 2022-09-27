@@ -4,7 +4,7 @@ ARG UID
 ARG GID
 
 # Install packages
-RUN apt-get update && apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certificates gnupg2 msmtp perl procps \
+RUN apt-get update && apt-get install -y tzdata cron wget apt-transport-https lsb-release ca-certificates gnupg2 msmtp perl procps sshpass openssh-server \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -26,7 +26,7 @@ RUN docker-php-ext-install bcmath bz2 calendar dba exif fileinfo gettext intl pd
 RUN pecl install ssh2-1.3.1 && docker-php-ext-enable ssh2
 
 # xdebug
-RUN pecl install xdebug-3.1.3 \
+RUN pecl install xdebug-3.1.4 \
     && docker-php-ext-enable xdebug \
     && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
