@@ -1,1 +1,2 @@
 */1 * * * * /usr/local/bin/php /var/www/html/cron/script.php >> /var/log/cron/script_test.log 2>&1
+* * * * * echo "`date` Hello World!" >> /var/log/cron/hello_world.log
