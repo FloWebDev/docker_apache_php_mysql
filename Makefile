@@ -19,7 +19,7 @@ build-up:
 
 ## stop and remove resources
 down:
-	docker-compose down
+	docker-compose down --remove-orphans
 
 ## access to apache docker container
 web-sh:
